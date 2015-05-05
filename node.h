@@ -4,11 +4,13 @@
 template <class T>
 struct node
 {
-  node* right;
-  node* left;
+node():right(nullptr),left(nullptr),parent(nullptr),data(0){}
+node(T data):right(nullptr),left(nullptr),parent(nullptr),data(data){}
+  
+  node *right;
+  node *left;
+  node *parent;
   T data;
-  node():right(nullptr),left(nullptr),data(0){}
-  node(T dta):right(nullptr),left(nullptr),data(dta){}
 };
 
 #endif

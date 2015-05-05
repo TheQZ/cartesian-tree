@@ -9,130 +9,161 @@
 template <class T>
 ctree<T>::~ctree()
 {
-    if(root != nullptr)
-        cleanCtree(root);
+  if(root != nullptr)
+    cleanCtree(root);
 }
 
 template <class T>
-void ctree<T>::cleanCtree(node<T>* nd)
+void ctree<T>::cleanCtree(node<T> *nd)
 {
-    if(nd != nullptr){
-        cleanCtree(nd->left);
-        cleanCtree(nd->right);
-        delete nd;
-    }
+  if(nd != nullptr){
+    cleanCtree(nd->left);
+    cleanCtree(nd->right);
+    delete nd;
+  }
 }
 
 template <class T>
 void ctree<T>::insert(T data)
 {
-    if(root == nullptr){
-        node<T>* nn = new node<T>(data);
-        root = nn;
-    }else
-        insert(root, data);
+  if(root == nullptr){
+    root = new node<T>(data);
+    std::cout << "Inserted: " << data;
+  }else{
+    insert(root, data);
+    std::cout << ", " << data;
+  }
 }
 
 template <class T>
-void ctree<T>::insert(node<T>* nd, T data)
+void ctree<T>::insert(node<T> *nd, T data)
 {
-    // find rightmost node
-    while(nd->right != nullptr) nd = nd->right;
-    node<T>** nn = new node<T>(data);
-    nd->right = nn;
-
-    // if necessary, call movearound
-    if(nn->data < nd->data) moveAround(nd);
+  // find rightmost node
+  while(nd->right != nullptr) nd = nd->right;
+  node<T> *nn = new node<T>(data);
+  nn->parent = nd;
+  nd->right = nn;
+  
+  // Call movearound regardless.
+  // I think it's better to just let it hit the base case in the function instead.
+  moveAround(nn);
 }
 
 template <class T>
-void ctree<T>::moveAround(node * nd) {
-    
-    // node *s = nd->right; // node that we are moving
-    // nd->right = s->left;
-    // s->left = nd;
-     
-    
-    //s->parent = nd->parent
-    // nd->parent->child = s;
-    // change the other parents too:
-    // the one for nd->right
-    // nd->parent = s
-    // etc. etc.
+void ctree<T>::moveAround(node<T> *nd)
+{
+  if(nd->parent == nullptr) return;
+  if(nd->parent->data < nd->data) return;
+  
+  if(nd->left == nullptr){
+    if(nd->parent == root){
+      nd->left = nd->parent;
+      nd->parent->right = nullptr;
+      nd->parent = nullptr;
+      nd->left->parent = nd;
+      root = nd;
+    }else{
+      nd->parent = nd->parent->parent;
+      nd->left = nd->parent->right;
+      nd->left->parent = nd;
+      nd->parent->right = nd;
+      nd->left->right = nullptr;
+    }
+  }else{
+    if(nd->parent == root) root = nd;
+    nd->parent->right = nd->left;
+    nd->left->parent = nd->parent;
+    nd->left = nd->parent;
+    nd->parent = nd->left->parent;
+    nd->left->parent = nd;
+    if(nd->parent != nullptr) nd->parent->right = nd;
+  }
+  moveAround(nd);
 }
 
 template <class T>
 std::string ctree<T>::inOrder()
 {
-    ostr = "";
+  ostr = "";
 
-    if(root == nullptr)
-        return this->ostr;
-
-    inOrder(root);
-    ostr.erase(ostr.find_last_of(" "));
-    ostr.erase(ostr.find_last_of(","));
+  if(root == nullptr)
     return this->ostr;
+
+  inOrder(root);
+  ostr.erase(ostr.find_last_of(" "));
+  ostr.erase(ostr.find_last_of(","));
+  return this->ostr;
 }
 
 template <class T>
-void ctree<T>::inOrder(node<T>* nd)
+void ctree<T>::inOrder(node<T> *nd)
 {
-    if(nd == nullptr)
-        return;
+  if(nd == nullptr)
+    return;
 
-    inOrder(nd->left);
-    ostr += toStr(nd->data);
-    ostr += ", ";
-    inOrder(nd->right);
+  inOrder(nd->left);
+  
+  std::ostringstream ss;
+  ss << nd->data;
+  ostr += ss.str();
+  ostr += ", ";
+
+  inOrder(nd->right);
 }
 
 template <class T>
 int ctree<T>::size()
 {
-    if(root == nullptr)
-        return 0;
+  if(root == nullptr)
+    return 0;
 
-    return size(root);
+  return size(root);
 }
 
 template <class T>
-int ctree<T>::size(node<T>* nd)
+int ctree<T>::size(node<T> *nd)
 {
-    if(nd == nullptr)
-        return 0;
+  if(nd == nullptr)
+    return 0;
 
-    return size(nd->left) + size(nd->right) + 1;
+  return size(nd->left) + size(nd->right) + 1;
 }
 
 template <class T>
-bool ctree<T>::find(T data)
+bool ctree<T>::search(T data)
 {
-    if(root == nullptr)
-        return nullptr;
+  if(root == nullptr)
+    return nullptr;
 
-    return find(root, data);
+  return find(root, data);
 }
 
 template <class T>
-bool ctree<T>::find(node<T>* nd, T data)
+bool ctree<T>::search(node<T> *nd, T data)
 {
-    if(data == nd->data)
-        return nd;
+  if(data == nd->data)
+    return nd;
 
-    if(nd->right == nullptr && nd->left == nullptr)
-        return nullptr;
+  if(nd->right == nullptr && nd->left == nullptr)
+    return nullptr;
 
-    if(data > nd->data)
-        return find(nd->right, data);
-    else
-        return find(nd->left, data);
+  if(data > nd->data)
+    return find(nd->right, data);
+  else
+    return find(nd->left, data);
 }
 
 template <class T>
-std::string ctree<T>::toStr(T data)
+bool ctree<T>::isHeap()
 {
-    std::ostringstream ss;
-    ss << data;
-    return ss.str();
+  return isHeap(root);
+}
+
+template <class T>
+bool ctree<T>::isHeap(node<T> *nd)
+{
+  if(nd == nullptr) return true;
+  if(nd->left != nullptr && nd->data > nd->left->data) return false;
+  if(nd->right != nullptr && nd->data > nd->right->data) return false;
+  return isHeap(nd->left) && isHeap(nd->right);
 }
