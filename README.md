@@ -1,2 +1,2 @@
-# cartesian-tree
-Implementation of a templated cartesian tree structure in C++. Final project for CS240.
+# Jasper and Samuel David's Cartesian Tree
+A C++ implementation of a templated [cartesian tree](http://wcipeg.com/wiki/Cartesian_tree) data structure, complete with a GUI. 
