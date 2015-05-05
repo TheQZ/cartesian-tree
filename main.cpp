@@ -10,7 +10,7 @@ int main(int argc, char *argv[])
   ctree<int> rene;
   int n, s;
   
-  /*<DBG>*
+  /*<DBG>*/
   if(argc != 3){
     std::cout << "Correct syntax: " << argv[0] << " <[# of elements]> <[# to search for]>\n";
     return 1;
@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
 
   for(int i = 0; i < n; i++)  
     v.push_back(rand()%1000);
-  /*</DBG>*//*<DBG>*/
+  /*</DBG>*//*<DBG>*
   v.push_back(5);
   v.push_back(3);
   v.push_back(1);
