@@ -6,11 +6,13 @@
 #include <locale>
 #include <sstream>
 
+// - - - - - - - - - - - //
+//  DESTRUCTOR/CLEANER   //
+// - - - - - - - - - - - //
 template <class T>
 ctree<T>::~ctree()
 {
-  if(root != nullptr)
-    cleanCtree(root);
+  if(root != nullptr) cleanCtree(root);
 }
 
 template <class T>
@@ -23,6 +25,9 @@ void ctree<T>::cleanCtree(node<T> *nd)
   }
 }
 
+// - - - - - - - - - - - //
+//   INSERT/MOVEAROUND   //
+// - - - - - - - - - - - //
 template <class T>
 void ctree<T>::insert(T data)
 {
@@ -81,13 +86,15 @@ void ctree<T>::moveAround(node<T> *nd)
   moveAround(nd);
 }
 
+// - - - - - - - - - - - //
+//       IN-ORDER        //
+// - - - - - - - - - - - //
 template <class T>
 std::string ctree<T>::inOrder()
 {
   ostr = "";
 
-  if(root == nullptr)
-    return this->ostr;
+  if(root == nullptr) return this->ostr;
 
   inOrder(root);
   ostr.erase(ostr.find_last_of(" "));
@@ -98,8 +105,7 @@ std::string ctree<T>::inOrder()
 template <class T>
 void ctree<T>::inOrder(node<T> *nd)
 {
-  if(nd == nullptr)
-    return;
+  if(nd == nullptr) return;
 
   inOrder(nd->left);
   
@@ -111,48 +117,62 @@ void ctree<T>::inOrder(node<T> *nd)
   inOrder(nd->right);
 }
 
+// - - - - - - - - - - - //
+//         SIZE          //
+// - - - - - - - - - - - //
 template <class T>
 int ctree<T>::size()
 {
-  if(root == nullptr)
-    return 0;
-
+  if(root == nullptr) return 0;
   return size(root);
 }
 
 template <class T>
 int ctree<T>::size(node<T> *nd)
 {
-  if(nd == nullptr)
-    return 0;
-
+  if(nd == nullptr) return 0;
   return size(nd->left) + size(nd->right) + 1;
 }
 
+// - - - - - - - - - - - //
+//        HEIGHT         //
+// - - - - - - - - - - - //
+template <class T>
+int ctree<T>::height()
+{
+  if(root == nullptr) return 0;
+  return height(root);
+}
+
+template <class T>
+int ctree<T>::height(node<T> *nd)
+{
+  if(nd == nullptr) return 0;
+  return std::max(1 + height(nd->left), 1 + height(nd->right));
+}
+// - - - - - - - - - - - //
+//        SEARCH         //
+// - - - - - - - - - - - //
 template <class T>
 bool ctree<T>::search(T data)
 {
-  if(root == nullptr)
-    return nullptr;
-
-  return find(root, data);
+  if(root == nullptr) return false;
+  return search(root, data);
 }
 
 template <class T>
 bool ctree<T>::search(node<T> *nd, T data)
 {
-  if(data == nd->data)
-    return nd;
-
-  if(nd->right == nullptr && nd->left == nullptr)
-    return nullptr;
-
-  if(data > nd->data)
-    return find(nd->right, data);
-  else
-    return find(nd->left, data);
+  if(nd == nullptr) return false;
+  if(data == nd->data) return true;
+  if(data < nd->data) return false;
+  
+  return search(nd->left, data) || search(nd->right, data);
 }
 
+// - - - - - - - - - - - //
+//        ISHEAP         //
+// - - - - - - - - - - - //
 template <class T>
 bool ctree<T>::isHeap()
 {

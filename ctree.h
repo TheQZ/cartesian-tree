@@ -14,6 +14,7 @@ class ctree
   void insert(T data);
   std::string inOrder();
   int size();
+  int height();
   bool search(T data);
   bool isHeap();
     
@@ -26,6 +27,7 @@ class ctree
   void moveAround(node<T> *nd);
   void inOrder(node<T> *nd);
   int size(node<T> *nd);
+  int height(node<T> *nd);
   bool search(node<T> *nd, T data);
   bool isHeap(node<T> *nd);
 };
