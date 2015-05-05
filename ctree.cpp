@@ -36,25 +36,29 @@ void ctree<T>::insert(T data)
 template <class T>
 void ctree<T>::insert(node<T>* nd, T data)
 {
-    if(nd->data < data){
-        if(nd->right == nullptr){
-            node<T>* nn = new node<T>(data);
-            nd->right = nn;
-            return;
-        }else{
-            insert(nd->right, data);
-            return;
-        }
-    }else{
-        if(nd->left == nullptr){
-            node<T>* nn = new node<T>(data);
-            nd->left = nn;
-            return;
-        }else{
-            insert(nd->left, data);
-            return;
-        }
-    }
+    // find rightmost node
+    while(nd->right != nullptr) nd = nd->right;
+    node<T>** nn = new node<T>(data);
+    nd->right = nn;
+
+    // if necessary, call movearound
+    if(nn->data < nd->data) moveAround(nd);
+}
+
+template <class T>
+void ctree<T>::moveAround(node * nd) {
+    
+    // node *s = nd->right; // node that we are moving
+    // nd->right = s->left;
+    // s->left = nd;
+     
+    
+    //s->parent = nd->parent
+    // nd->parent->child = s;
+    // change the other parents too:
+    // the one for nd->right
+    // nd->parent = s
+    // etc. etc.
 }
 
 template <class T>
