@@ -3,6 +3,7 @@
 
 #include "node.h"
 #include <string>
+#include <vector>
 
 template <class T>
 class ctree
@@ -16,11 +17,14 @@ class ctree
   int size();
   int height();
   bool search(T data);
+  void visualize();
   bool isHeap();
     
  private:
   node<T> *root;
-  std::string ostr;
+  std::string outStr;
+  std::vector<T> inOrderVec;
+  std::vector<int> heights;
   
   void cleanCtree(node<T> *nd);
   void insert(node<T> *nd, T data);
@@ -29,6 +33,8 @@ class ctree
   int size(node<T> *nd);
   int height(node<T> *nd);
   bool search(node<T> *nd, T data);
+  int getHeight(node<T> *nd);
+  int numSize(T num);
   bool isHeap(node<T> *nd);
 };
 

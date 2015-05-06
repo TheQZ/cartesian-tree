@@ -7,7 +7,7 @@
 #include <sstream>
 
 // - - - - - - - - - - - //
-//  DESTRUCTOR/CLEANER   //
+// DESTRUCTOR/CLEANCTREE //
 // - - - - - - - - - - - //
 template <class T>
 ctree<T>::~ctree()
@@ -26,7 +26,7 @@ void ctree<T>::cleanCtree(node<T> *nd)
 }
 
 // - - - - - - - - - - - //
-//   INSERT/MOVEAROUND   //
+//   INSERT/MOVE AROUND  //
 // - - - - - - - - - - - //
 template <class T>
 void ctree<T>::insert(T data)
@@ -87,19 +87,25 @@ void ctree<T>::moveAround(node<T> *nd)
 }
 
 // - - - - - - - - - - - //
-//       IN-ORDER        //
+//       IN ORDER        //
 // - - - - - - - - - - - //
 template <class T>
 std::string ctree<T>::inOrder()
 {
-  ostr = "";
+  outStr = "";
+  inOrderVec.clear();
+  heights.clear();
 
-  if(root == nullptr) return this->ostr;
+  if(root == nullptr){
+    heights.push_back(0);
+    return outStr;
+  }
 
   inOrder(root);
-  ostr.erase(ostr.find_last_of(" "));
-  ostr.erase(ostr.find_last_of(","));
-  return this->ostr;
+  outStr.erase(outStr.find_last_of(" "));
+  outStr.erase(outStr.find_last_of(","));
+
+  return outStr;
 }
 
 template <class T>
@@ -111,8 +117,11 @@ void ctree<T>::inOrder(node<T> *nd)
   
   std::ostringstream ss;
   ss << nd->data;
-  ostr += ss.str();
-  ostr += ", ";
+  outStr += ss.str();
+  outStr += ", ";
+
+  inOrderVec.push_back(nd->data);
+  heights.push_back(getHeight(nd));
 
   inOrder(nd->right);
 }
@@ -150,6 +159,7 @@ int ctree<T>::height(node<T> *nd)
   if(nd == nullptr) return 0;
   return std::max(1 + height(nd->left), 1 + height(nd->right));
 }
+
 // - - - - - - - - - - - //
 //        SEARCH         //
 // - - - - - - - - - - - //
@@ -166,12 +176,56 @@ bool ctree<T>::search(node<T> *nd, T data)
   if(nd == nullptr) return false;
   if(data == nd->data) return true;
   if(data < nd->data) return false;
-  
   return search(nd->left, data) || search(nd->right, data);
 }
 
 // - - - - - - - - - - - //
-//        ISHEAP         //
+//       VISUALIZE       //
+// - - - - - - - - - - - //
+template <class T>
+void ctree<T>::visualize()
+{
+  std::cout << inOrder();
+  std::cout << "\n";
+  for(int i = 0; i < height(); i++){
+    for(int j = 0; j < size(); j++){
+      if(height() - heights[j] + 1 > 0){
+	std::cout << "#  ";
+	std::cout << std::string(numSize(inOrderVec[j])-1, ' ');
+	heights[j]++;
+      }else{
+	std::cout << "   ";
+	std::cout << std::string(numSize(inOrderVec[j])-1, ' ');
+      }
+    }
+    std::cout << "\n";
+  }
+}
+
+template <class T>
+int ctree<T>::numSize(T num)
+{
+  std::ostringstream ss;
+  ss << num;
+  return ss.str().size();
+}
+
+// - - - - - - - - - - - //
+//      GET HEIGHT       //
+// - - - - - - - - - - - //
+template <class T>
+int ctree<T>::getHeight(node<T> *nd)
+{
+  int h = 0;
+  while(nd != root){
+    h++;
+    nd = nd->parent;
+  }
+  return h+1;
+}
+
+// - - - - - - - - - - - //
+//        IS HEAP        //
 // - - - - - - - - - - - //
 template <class T>
 bool ctree<T>::isHeap()

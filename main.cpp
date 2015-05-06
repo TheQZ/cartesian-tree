@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
 
   for(int i = 0; i < n; i++)  
     v.push_back(rand()%1000);
-  /*</DBG>*//*<DBG>*
+    /*</DBG>*//*<DBG>*
   v.push_back(5);
   v.push_back(3);
   v.push_back(1);
@@ -35,9 +35,11 @@ int main(int argc, char *argv[])
   
   std::cout << "\nIn-Order: " << rene.inOrder() << std::endl;
   std::cout << "Is Heap?: " << (rene.isHeap() ? "Yes, indeed." : "No, sirree.") << std::endl;
-  std::cout << "Search(" << (s ? s : 1) << "): " << (rene.search((s ? s : 1)) ? "Found it!" : "Not there.") << std::endl;
+  std::cout << "Search(" << (s?s:1) << "): " << (rene.search((s?s:1)) ? "Found it!" : "Not there.") << std::endl;
   std::cout << "Size: " << rene.size() << std::endl;
-  std::cout << "Height: " << rene.height() << std::endl;
+  std::cout << "Height: " << rene.height() << std::endl << std::endl;
+
+  rene.visualize();
   
   return 0;
 }
