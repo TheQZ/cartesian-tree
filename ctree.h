@@ -19,7 +19,9 @@ class ctree
   bool search(T data);
   void visualize();
   bool isHeap();
-    
+  void deleteKey();
+  vector<node<T> *> sortedVector();
+
  private:
   node<T> *root;
   std::string outStr;
@@ -36,6 +38,9 @@ class ctree
   int getHeight(node<T> *nd);
   int numSize(T num);
   bool isHeap(node<T> *nd);
+  void addToQueue(std::queue<node<T> *> &q);
+  void addToQueue(node<T> *n, std::queue<node<T> *> &q);
+  void reinsert(node<T> n);
 };
 
 #include "ctree.cpp"

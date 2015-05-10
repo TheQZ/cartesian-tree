@@ -5,6 +5,7 @@
 #include <iomanip>
 #include <locale>
 #include <sstream>
+#include <queue>
 
 // - - - - - - - - - - - //
 // DESTRUCTOR/CLEANCTREE //
@@ -239,3 +240,74 @@ bool ctree<T>::isHeap(node<T> *nd)
   if(nd->right != nullptr && nd->data > nd->right->data) return false;
   return isHeap(nd->left) && isHeap(nd->right);
 }
+
+// - - - - - - - - - - - //
+//      DELETE KEY       //
+// - - - - - - - - - - - //
+template <class T>
+void ctree<T>::deleteKey() {
+    if (root == nullptr) return;
+
+    // create a queue of pointers to nodes 
+    std::queue<node<T> *> q = new queue{};
+
+    // add all nodes except root to a queue in order
+    addToQueue(q);
+    root->left = nullptr;
+    root->right = nullptr;
+
+    // delete key
+    delete root;
+
+    // reinsert nodes according to order.
+    while(!q.empty()) {
+        reinsert(q.pop());
+    }
+}
+
+template <class T>
+void ctree<T>::addToQueue(std::queue<node<T> *> &q) {
+    // add nodes left of root to queue in sorted order
+    addToQueue(root->left);
+    // add nodes right of root to queue in sorted order
+    addToQueue(root->right);
+}
+
+template <class T>
+void ctree<T>::addToQueue(node<T> *n, std::queue<node<T> *> &q) {
+    if(n == nullptr) return;
+
+    addToQueue(n->left);
+    n->left == nullptr;
+
+    node<T> *t = n->right;
+    t->parent = nullptr;
+    n->right == nullptr;
+
+    n->parent == nullptr;
+    queue.push(n);
+    
+    addToQueue(t);
+}
+
+template <class T>
+void ctree<T>::reinsert(node<T> * n) {
+    if(root == nullptr) root = n;
+    else {
+        node *t = root;
+        while(t->right != nullptr) t = t->right;
+        n->parent = t;
+        t->right = n;
+        movearound(n);
+    }
+}
+
+// - - - - - - - - - - - - //
+//  VECTOR IN SORTED ORDER //
+// - - - - - - - - - - - - //
+template <class T>
+vector<node<T> *> ctree<T>::sortedVector() {
+
+}
+
+
