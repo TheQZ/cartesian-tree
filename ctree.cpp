@@ -33,10 +33,8 @@ void ctree<T>::insert(T data)
 {
   if(root == nullptr){
     root = new node<T>(data);
-    std::cout << "Inserted: " << data;
   }else{
     insert(root, data);
-    std::cout << ", " << data;
   }
 }
 
