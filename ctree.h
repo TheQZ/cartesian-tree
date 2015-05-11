@@ -20,7 +20,7 @@ class ctree
   void visualize();
   bool isHeap();
   void deleteKey();
-  vector<node<T> *> sortedVector();
+  std::vector<node<T> *> sortedVector();
 
  private:
   node<T> *root;
@@ -41,6 +41,7 @@ class ctree
   void addToQueue(std::queue<node<T> *> &q);
   void addToQueue(node<T> *n, std::queue<node<T> *> &q);
   void reinsert(node<T> n);
+  void smallestCandidate(std::vector<node<T> *> &candidates);
 };
 
 #include "ctree.cpp"

@@ -34,8 +34,10 @@ void ctree<T>::insert(T data)
 {
   if(root == nullptr){
     root = new node<T>(data);
+    std::cout << "Inserted: " << data;
   }else{
     insert(root, data);
+    std::cout << ", " << data;
   }
 }
 
@@ -48,8 +50,6 @@ void ctree<T>::insert(node<T> *nd, T data)
   nn->parent = nd;
   nd->right = nn;
   
-  // Call movearound regardless.
-  // I think it's better to just let it hit the base case in the function instead.
   moveAround(nn);
 }
 
@@ -268,16 +268,16 @@ void ctree<T>::deleteKey() {
 template <class T>
 void ctree<T>::addToQueue(std::queue<node<T> *> &q) {
     // add nodes left of root to queue in sorted order
-    addToQueue(root->left);
+    addToQueue(root->left, q);
     // add nodes right of root to queue in sorted order
-    addToQueue(root->right);
+    addToQueue(root->right, q);
 }
 
 template <class T>
 void ctree<T>::addToQueue(node<T> *n, std::queue<node<T> *> &q) {
     if(n == nullptr) return;
 
-    addToQueue(n->left);
+    addToQueue(n->left, q);
     n->left == nullptr;
 
     node<T> *t = n->right;
@@ -285,7 +285,7 @@ void ctree<T>::addToQueue(node<T> *n, std::queue<node<T> *> &q) {
     n->right == nullptr;
 
     n->parent == nullptr;
-    queue.push(n);
+    q.push(n);
     
     addToQueue(t);
 }
@@ -298,7 +298,7 @@ void ctree<T>::reinsert(node<T> * n) {
         while(t->right != nullptr) t = t->right;
         n->parent = t;
         t->right = n;
-        movearound(n);
+        moveAround(n);
     }
 }
 
@@ -306,8 +306,29 @@ void ctree<T>::reinsert(node<T> * n) {
 //  VECTOR IN SORTED ORDER //
 // - - - - - - - - - - - - //
 template <class T>
-vector<node<T> *> ctree<T>::sortedVector() {
+std::vector<node<T> *> ctree<T>::sortedVector() {
+    std::vector<node<T> *> candidates = new vector{};
+    std::vector<node<T> *> sorted = new vector{};
 
+    candidates.push_back(root);
+    while(!candidates.empty()) {
+        unsigned int i = smallestCandidate(candidates);
+        node<T> *s = candidates[i];
+        sorted.push_back(s);
+        candidates.erase(candidates.begin() + i);
+
+        if(s->left != nullptr) candidates.push_back(s->left);
+        if(s->right != nullptr) candidates.push_back(s->right);
+    }
+
+    return sorted;
 }
 
-
+templte <class T>
+unsigned int ctree::smallestCandidate(std::vector<node<T> *> &c) {
+    unsigned int smallest = 0;
+    for (int i = 0; i < c.size(), i++) {
+        if(c[i]->data < c[smallest]->data) smallest = x;
+    }
+    return smallest;
+}
