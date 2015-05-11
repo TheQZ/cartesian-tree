@@ -248,13 +248,8 @@ template <class T>
 void ctree<T>::deleteKey() {
   if (root == nullptr) return;
 
-<<<<<<< Updated upstream
-  // create a queue of pointers to nodes 
-  std::queue<node<T>*> q();
-=======
     // create a queue of pointers to nodes 
     std::queue<node<T> *> q = new std::queue<node<T> *>{};
->>>>>>> Stashed changes
 
   // add all nodes except root to a queue in order
   addToQueue(q);
@@ -296,17 +291,6 @@ void ctree<T>::addToQueue(node<T> *n, std::queue<node<T>*> &q) {
 }
 
 template <class T>
-<<<<<<< Updated upstream
-void ctree<T>::reinsert(node<T> * n) {
-  if(root == nullptr) root = n;
-  else {
-    node<T> *t = root;
-    while(t->right != nullptr) t = t->right;
-    n->parent = t;
-    t->right = n;
-    moveAround(n);
-  }
-=======
 void ctree<T>::reinsert(node<T> *n) {
     if(root == nullptr) root = n;
     else {
@@ -316,29 +300,13 @@ void ctree<T>::reinsert(node<T> *n) {
         t->right = n;
         moveAround(n);
     }
->>>>>>> Stashed changes
 }
 
 // - - - - - - - - - - - - //
 //  VECTOR IN SORTED ORDER //
 // - - - - - - - - - - - - //
 template <class T>
-<<<<<<< Updated upstream
-std::vector<node<T>*> ctree<T>::sortedVector() {
-  std::vector<node<T>*> candidates = new std::vector<node<T>*>{};
-  std::vector<node<T>*> sorted = new std::vector<node<T>*>{};
 
-  candidates.push_back(root);
-  while(!candidates.empty()) {
-    unsigned int i = smallestCandidate(candidates);
-    node<T> *s = candidates[i];
-    sorted.push_back(s);
-    candidates.erase(candidates.begin() + i);
-
-    if(s->left != nullptr) candidates.push_back(s->left);
-    if(s->right != nullptr) candidates.push_back(s->right);
-  }
-=======
 std::vector<node<T> *> ctree<T>::sortedVector() {
     std::vector<node<T> *> candidates = new std::vector<node<T> *>{};
     std::vector<node<T> *> sorted = new std::vector<node<T> *>{};
@@ -353,25 +321,15 @@ std::vector<node<T> *> ctree<T>::sortedVector() {
         if(s->left != nullptr) candidates.push_back(s->left);
         if(s->right != nullptr) candidates.push_back(s->right);
     }
->>>>>>> Stashed changes
 
   return sorted;
 }
 
 template <class T>
-<<<<<<< Updated upstream
-unsigned int ctree<T>::smallestCandidate(std::vector<node<T>*> &c) {
-  unsigned int smallest = 0;
-  for (int i = 0; i < c.size(); i++) {
-    if(c[i]->data < c[smallest]->data) smallest = i;
-  }
-  return smallest;
-=======
 unsigned int ctree<T>::smallestCandidate(std::vector<node<T> *> &c) {
     unsigned int smallest = 0;
     for (int i = 0; i < c.size(); i++) {
         if(c[i]->data < c[smallest]->data) smallest = i;
     }
     return smallest;
->>>>>>> Stashed changes
 }
