@@ -42,7 +42,11 @@ class ctree
   void addToQueue(std::queue<node<T>*> &q);
   void addToQueue(node<T> *n, std::queue<node<T> *> &q);
   void reinsert(node<T> *n);
+<<<<<<< Updated upstream
   unsigned int smallestCandidate(std::vector<node<T>*> &c);
+=======
+  unsigned int smallestCandidate(std::vector<node<T> *> &candidates);
+>>>>>>> Stashed changes
 };
 
 #include "ctree.cpp"
