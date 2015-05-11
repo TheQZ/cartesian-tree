@@ -10,7 +10,7 @@ int main(int argc, char *argv[])
   ctree<int> rene;
   int n, s;
   
-  /*<DBG>*/
+  /*<DBG>*
   if(argc != 3){
     std::cout << "Correct syntax: " << argv[0] << " <[# of elements]> <[# to search for]>\n";
     return 1;
@@ -23,13 +23,13 @@ int main(int argc, char *argv[])
 
   for(int i = 0; i < n; i++)  
     v.push_back(rand()%1000);
-    /*</DBG>*//*<DBG>*
-  v.push_back(5);
-  v.push_back(3);
-  v.push_back(1);
-  v.push_back(8);
-  v.push_back(0);
   /*</DBG>*/
+    v.push_back(5);
+    v.push_back(3);
+    v.push_back(1);
+    v.push_back(8);
+    v.push_back(0);
+    /*</DBG>*/
   for(int i = 0; i < v.size(); i++)  
     rene.insert(v[i]);
   
@@ -39,6 +39,9 @@ int main(int argc, char *argv[])
   std::cout << "Size: " << rene.size() << std::endl;
   std::cout << "Height: " << rene.height() << std::endl << std::endl;
 
+  rene.visualize();
+
+  rene.deleteKey();
   rene.visualize();
   
   return 0;

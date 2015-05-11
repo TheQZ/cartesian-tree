@@ -246,89 +246,89 @@ bool ctree<T>::isHeap(node<T> *nd)
 // - - - - - - - - - - - //
 template <class T>
 void ctree<T>::deleteKey() {
-    if (root == nullptr) return;
+  if (root == nullptr) return;
 
-    // create a queue of pointers to nodes 
-    std::queue<node<T> *> q = new queue{};
+  // create a queue of pointers to nodes 
+  std::queue<node<T>*> q();
 
-    // add all nodes except root to a queue in order
-    addToQueue(q);
-    root->left = nullptr;
-    root->right = nullptr;
+  // add all nodes except root to a queue in order
+  addToQueue(q);
+  root->left = nullptr;
+  root->right = nullptr;
 
-    // delete key
-    delete root;
+  // delete key
+  delete root;
 
-    // reinsert nodes according to order.
-    while(!q.empty()) {
-        reinsert(q.pop());
-    }
+  // reinsert nodes according to order.
+  while(!q.empty()) {
+    reinsert(q.pop());
+  }
 }
 
 template <class T>
-void ctree<T>::addToQueue(std::queue<node<T> *> &q) {
-    // add nodes left of root to queue in sorted order
-    addToQueue(root->left, q);
-    // add nodes right of root to queue in sorted order
-    addToQueue(root->right, q);
+void ctree<T>::addToQueue(std::queue<node<T>*> &q) {
+  // add nodes left of root to queue in sorted order
+  addToQueue(root->left, q);
+  // add nodes right of root to queue in sorted order
+  addToQueue(root->right, q);
 }
 
 template <class T>
-void ctree<T>::addToQueue(node<T> *n, std::queue<node<T> *> &q) {
-    if(n == nullptr) return;
+void ctree<T>::addToQueue(node<T> *n, std::queue<node<T>*> &q) {
+  if(n == nullptr) return;
 
-    addToQueue(n->left, q);
-    n->left == nullptr;
+  addToQueue(n->left, q);
+  n->left == nullptr;
 
-    node<T> *t = n->right;
-    t->parent = nullptr;
-    n->right == nullptr;
+  node<T> *t = n->right;
+  t->parent = nullptr;
+  n->right == nullptr;
 
-    n->parent == nullptr;
-    q.push(n);
+  n->parent == nullptr;
+  q.push(n);
     
-    addToQueue(t);
+  addToQueue(t);
 }
 
 template <class T>
 void ctree<T>::reinsert(node<T> * n) {
-    if(root == nullptr) root = n;
-    else {
-        node *t = root;
-        while(t->right != nullptr) t = t->right;
-        n->parent = t;
-        t->right = n;
-        moveAround(n);
-    }
+  if(root == nullptr) root = n;
+  else {
+    node<T> *t = root;
+    while(t->right != nullptr) t = t->right;
+    n->parent = t;
+    t->right = n;
+    moveAround(n);
+  }
 }
 
 // - - - - - - - - - - - - //
 //  VECTOR IN SORTED ORDER //
 // - - - - - - - - - - - - //
 template <class T>
-std::vector<node<T> *> ctree<T>::sortedVector() {
-    std::vector<node<T> *> candidates = new vector{};
-    std::vector<node<T> *> sorted = new vector{};
+std::vector<node<T>*> ctree<T>::sortedVector() {
+  std::vector<node<T>*> candidates = new std::vector<node<T>*>{};
+  std::vector<node<T>*> sorted = new std::vector<node<T>*>{};
 
-    candidates.push_back(root);
-    while(!candidates.empty()) {
-        unsigned int i = smallestCandidate(candidates);
-        node<T> *s = candidates[i];
-        sorted.push_back(s);
-        candidates.erase(candidates.begin() + i);
+  candidates.push_back(root);
+  while(!candidates.empty()) {
+    unsigned int i = smallestCandidate(candidates);
+    node<T> *s = candidates[i];
+    sorted.push_back(s);
+    candidates.erase(candidates.begin() + i);
 
-        if(s->left != nullptr) candidates.push_back(s->left);
-        if(s->right != nullptr) candidates.push_back(s->right);
-    }
+    if(s->left != nullptr) candidates.push_back(s->left);
+    if(s->right != nullptr) candidates.push_back(s->right);
+  }
 
-    return sorted;
+  return sorted;
 }
 
-templte <class T>
-unsigned int ctree::smallestCandidate(std::vector<node<T> *> &c) {
-    unsigned int smallest = 0;
-    for (int i = 0; i < c.size(), i++) {
-        if(c[i]->data < c[smallest]->data) smallest = x;
-    }
-    return smallest;
+template <class T>
+unsigned int ctree<T>::smallestCandidate(std::vector<node<T>*> &c) {
+  unsigned int smallest = 0;
+  for (int i = 0; i < c.size(); i++) {
+    if(c[i]->data < c[smallest]->data) smallest = i;
+  }
+  return smallest;
 }
