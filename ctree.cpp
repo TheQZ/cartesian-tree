@@ -249,7 +249,7 @@ void ctree<T>::deleteKey() {
   if (root == nullptr) return;
 
     // create a queue of pointers to nodes 
-    std::queue<node<T> *> q = new std::queue<node<T> *>{};
+    std::queue<node<T> *> *q = new std::queue<node<T> *>{};
 
   // add all nodes except root to a queue in order
   addToQueue(q);
@@ -260,13 +260,14 @@ void ctree<T>::deleteKey() {
   delete root;
 
   // reinsert nodes according to order.
-  while(!q.empty()) {
-    reinsert(q.pop());
+  while(!q->empty()) {
+    reinsert(q->front());
+    q->pop();
   }
 }
 
 template <class T>
-void ctree<T>::addToQueue(std::queue<node<T>*> &q) {
+void ctree<T>::addToQueue(std::queue<node<T>*> *q) {
   // add nodes left of root to queue in sorted order
   addToQueue(root->left, q);
   // add nodes right of root to queue in sorted order
@@ -274,20 +275,20 @@ void ctree<T>::addToQueue(std::queue<node<T>*> &q) {
 }
 
 template <class T>
-void ctree<T>::addToQueue(node<T> *n, std::queue<node<T>*> &q) {
+void ctree<T>::addToQueue(node<T> *n, std::queue<node<T>*> *q) {
   if(n == nullptr) return;
 
   addToQueue(n->left, q);
-  n->left == nullptr;
+  n->left = nullptr;
 
   node<T> *t = n->right;
   t->parent = nullptr;
-  n->right == nullptr;
+  n->right = nullptr;
 
-  n->parent == nullptr;
-  q.push(n);
+  n->parent = nullptr;
+  q->push(n);
     
-  addToQueue(t);
+  addToQueue(t, q);
 }
 
 template <class T>

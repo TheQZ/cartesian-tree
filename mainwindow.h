@@ -12,6 +12,7 @@
 #include <QLabel>
 #include <QGraphicsView>
 #include <QString>
+#include <QLabel>
 #include <iostream>
 #include "ctree.h"
 
@@ -40,6 +41,10 @@ private:
     QLabel *titleLabel;
     QLabel *valuesLabel;
     QLabel *treeLabel;
+
+    bool firstInsert;
+    QPushButton *deleteKeyButton;
+    QPushButton *sortButton;
 
     ctree<int> tree;
 };
