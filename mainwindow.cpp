@@ -19,7 +19,7 @@ MainWindow::MainWindow(QWidget *parent) :
     sortButton->setVisible(false);
     sortedValues = new QLabel();
     sortedValues->setVisible(false);
-    sortedValues->setAlignment(Qt::AlignCenter);
+    sortedValues->setAlignment(Qt::AlignBottom | Qt::AlignCenter);
 
     valuesSpinBox = new QSpinBox(this);
     valuesSpinBox->setMaximum(999);
@@ -31,14 +31,15 @@ MainWindow::MainWindow(QWidget *parent) :
     f.setBold(true);
 
     titleLabel = new QLabel("Jasper and Samuel David's\n Super-Cool Cartesian Tree Thingy");
-    titleLabel->setAlignment(Qt::AlignCenter);
+    titleLabel->setAlignment(Qt::AlignTop | Qt::AlignCenter);
     titleLabel->setFont(f);
 
     horizLayout->addWidget(valuesSpinBox);
     horizLayout->addWidget(insertButton);
-    horizLayout->setAlignment(Qt::AlignCenter);
+    horizLayout->setAlignment(Qt::AlignTop | Qt::AlignCenter);
     horizLayout->addWidget(deleteKeyButton);
 
+    mainLayout->setAlignment(Qt::AlignTop | Qt::AlignCenter);
     mainLayout->addWidget(titleLabel);
     mainLayout->addLayout(horizLayout);
     mainLayout->addWidget(sortButton);
@@ -52,7 +53,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     treeWidget = new QWidget();
 
-
+    srand (time(NULL));
 }
 
 void MainWindow::insert()
@@ -62,9 +63,7 @@ void MainWindow::insert()
 
     refresh();
 
-    srand (time(NULL));
-
-    valuesSpinBox->setValue(rand() % 30);
+    valuesSpinBox->setValue(rand() % 99);
 }
 
 void MainWindow::refresh()
@@ -80,7 +79,7 @@ void MainWindow::refresh()
     treeWidget = new QWidget();
 
     QHBoxLayout *treeLayout = new QHBoxLayout();
-    treeLayout->setAlignment(Qt::AlignCenter);
+    treeLayout->setAlignment(Qt::AlignTop | Qt::AlignCenter);
 
     tree.inOrder();
     std::vector<int> values = tree.getInorderVector();
@@ -91,17 +90,23 @@ void MainWindow::refresh()
         QLabel *ql = new QLabel(QString::fromStdString(std::to_string(values[i])));
 
         vl->addWidget(ql);
+        vl->setAlignment(Qt::AlignTop);
+        vl->setSpacing(0);
 
-        ql->setAutoFillBackground(true);
         QPalette pal = ql->palette();
         int cval = (heights[i] * 15) % 125;
         pal.setColor(QPalette::Window, QColor(50+cval, 120+cval, 120+cval, 128));
 
+        ql->setAutoFillBackground(true);
         ql->setPalette(pal);
+        ql->setFixedHeight(20);
 
-        for (int j = 0; j < heights[i]; j++) {
+        for (int j = 0; j < heights[i]-1; j++) {
             QLabel *littlel = new QLabel(" ");
             vl->addWidget(littlel);
+            littlel->setAutoFillBackground(true);
+            littlel->setPalette(pal);
+            littlel->setFixedHeight(20);
         }
 
         QFont f;

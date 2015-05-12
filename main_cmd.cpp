@@ -38,6 +38,11 @@ int main(int argc, char *argv[])
   std::cout << "Search(" << (s?s:1) << "): " << (rene.search((s?s:1)) ? "Found it!" : "Not there.") << std::endl;
   std::cout << "Size: " << rene.size() << std::endl;
   std::cout << "Height: " << rene.height() << std::endl;
+  std::cout << "Heights: ";
+  for(auto n : rene.getHeights()){
+    std::cout << n << " ";
+  }
+  std::cout << std::endl;
   std::cout << "Sorted Vector: ";
   for(auto n : rene.sortedVector()){
     std::cout << n->data << " ";
