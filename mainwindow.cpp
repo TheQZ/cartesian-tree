@@ -95,7 +95,7 @@ void MainWindow::refresh()
 
         QPalette pal = ql->palette();
         int cval = (heights[i] * 15) % 125;
-        pal.setColor(QPalette::Window, QColor(50+cval, 120+cval, 120+cval, 128));
+        pal.setColor(QPalette::Window, QColor(50+cval, 120+cval, 100+(cval *1.01), 128));
 
         ql->setAutoFillBackground(true);
         ql->setPalette(pal);
