@@ -117,7 +117,7 @@ void ctree<T>::inOrder(node<T> *nd)
   outStr += ss.str();
   outStr += ", ";
 
-  inOrderVec.push_back(nd->data);
+  inOrderVec.push_back(nd);
   heights.push_back(getHeight(nd));
 
   inOrder(nd->right);

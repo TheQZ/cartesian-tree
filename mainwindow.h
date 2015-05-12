@@ -26,6 +26,9 @@ class MainWindow : public QMainWindow
 
 public slots:
     void insert();
+    void refresh();
+    void removeKey();
+    void sortem();
 
 public:
     explicit MainWindow(QWidget *parent = 0);
@@ -39,11 +42,13 @@ private:
     QPushButton *insertButton;
     QSpinBox *valuesSpinBox;
     QLabel *titleLabel;
-    QLabel *valuesLabel;
-    QLabel *treeLabel;
+    QWidget *treeWidget;
+    QHBoxLayout *treeLayout;
+
 
     bool firstInsert;
     QPushButton *deleteKeyButton;
+    bool secondInsert;
     QPushButton *sortButton;
 
     ctree<int> tree;
