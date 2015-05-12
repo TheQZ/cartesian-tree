@@ -186,10 +186,10 @@ void ctree<T>::visualize()
   std::cout << "\n";
   for(int i = 0; i < height(); i++){
     for(int j = 0; j < size(); j++){
-      if(height() - heights[j] + 1 > 0){
+      if(heights[j] > 0){
 	std::cout << "#  ";
 	std::cout << std::string(numSize(inOrderVec[j])-1, ' ');
-	heights[j]++;
+	heights[j]--;
       }else{
 	std::cout << "   ";
 	std::cout << std::string(numSize(inOrderVec[j])-1, ' ');
