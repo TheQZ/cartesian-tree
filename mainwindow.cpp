@@ -21,6 +21,11 @@ MainWindow::MainWindow(QWidget *parent) :
     sortedValues->setVisible(false);
     sortedValues->setAlignment(Qt::AlignBottom | Qt::AlignCenter);
 
+    searchButton = new QPushButton("Search!");
+    searchButton->setVisible(false);
+    found = false;
+    foundVal = 0;
+
     valuesSpinBox = new QSpinBox(this);
     valuesSpinBox->setMaximum(999);
     valuesSpinBox->setMinimum(-999);
@@ -34,9 +39,10 @@ MainWindow::MainWindow(QWidget *parent) :
     titleLabel->setAlignment(Qt::AlignTop | Qt::AlignCenter);
     titleLabel->setFont(f);
 
-    horizLayout->addWidget(valuesSpinBox);
     horizLayout->addWidget(insertButton);
+    horizLayout->addWidget(valuesSpinBox);
     horizLayout->setAlignment(Qt::AlignTop | Qt::AlignCenter);
+    horizLayout->addWidget(searchButton);
     horizLayout->addWidget(deleteKeyButton);
 
     mainLayout->setAlignment(Qt::AlignTop | Qt::AlignCenter);
@@ -50,7 +56,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(insertButton,SIGNAL(clicked()),this,SLOT(insert()));
     connect(deleteKeyButton, SIGNAL(clicked()), this, SLOT(removeKey()));
     connect(sortButton, SIGNAL(clicked()), this, SLOT(sortem()));
-
+    connect(searchButton, SIGNAL(clicked()), this, SLOT(searchVal()));
     treeWidget = new QWidget();
 
     srand (time(NULL));
@@ -69,8 +75,13 @@ void MainWindow::insert()
 void MainWindow::refresh()
 {
     sortedValues->setVisible(false);
-    if (tree.size() >= 1) deleteKeyButton->setVisible(true);
-    else deleteKeyButton->setVisible(false);
+    if (tree.size() >= 1) {
+        deleteKeyButton->setVisible(true);
+        searchButton->setVisible(true);
+    } else {
+        deleteKeyButton->setVisible(false);
+        searchButton->setVisible(false);
+    }
     if (tree.size() >= 2) sortButton->setVisible(true);
     else sortButton->setVisible(false);
 
@@ -94,9 +105,16 @@ void MainWindow::refresh()
         vl->setSpacing(0);
 
         QPalette pal = ql->palette();
-        int cval = (heights[i] * 15) % 125;
+        int cval = (heights[i] * 10) % 125;
         pal.setColor(QPalette::Window, QColor(50+cval, 120+cval, 100+(cval *1.01), 128));
 
+        if(heights[i]-1 == 0) {
+            pal.setColor(QPalette::Window, QColor(200,200,50,128));
+        }
+        if(found && values[i] == foundVal) {
+            pal.setColor(QPalette::Window, QColor(150,122, 200, 128));
+            found = false;
+        }
         ql->setAutoFillBackground(true);
         ql->setPalette(pal);
         ql->setFixedHeight(20);
@@ -120,6 +138,25 @@ void MainWindow::refresh()
     treeWidget->setLayout(treeLayout);
     mainLayout->addWidget(treeWidget);
     mainLayout->addWidget(sortButton);
+}
+
+void MainWindow::searchVal()
+{
+    foundVal = valuesSpinBox->value();
+    if(tree.search(foundVal) == true) {
+        found = true;
+        refresh();
+        sortedValues->setText("Value found.");
+        mainLayout->addWidget(sortedValues);
+        sortedValues->setVisible(true);
+    } else {
+        refresh();
+        sortedValues->setText("Value not found.");
+        mainLayout->addWidget(sortedValues);
+        sortedValues->setVisible(true);
+    }
+
+    found = false;
 }
 
 void MainWindow::removeKey()

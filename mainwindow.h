@@ -31,6 +31,7 @@ public slots:
     void refresh();
     void removeKey();
     void sortem();
+    void searchVal();
 
 public:
     explicit MainWindow(QWidget *parent = 0);
@@ -49,11 +50,13 @@ private:
     QPushButton *deleteKeyButton;
     bool secondInsert;
     QPushButton *sortButton;
+    bool found;
+    int foundVal;
 
     ctree<int> tree;
     QWidget *treeWidget;
     QLabel *sortedValues;
-
+   QPushButton *searchButton;
 };
 
 #endif // MAINWINDOW_H
