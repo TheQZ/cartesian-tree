@@ -325,7 +325,7 @@ std::vector<node<T> *> ctree<T>::sortedVector() {
 template <class T>
 unsigned int ctree<T>::smallestCandidate(std::vector<node<T> *> *c) {
   unsigned int smallest = 0;
-  for (int i = 0; i < c->size(); i++) {
+  for (int i = 0; i < (int)c->size(); i++) {
     if(c->at(i)->data < c->at(smallest)->data) smallest = i;
   }
   return smallest;

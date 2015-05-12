@@ -42,9 +42,6 @@ private:
     QPushButton *insertButton;
     QSpinBox *valuesSpinBox;
     QLabel *titleLabel;
-    QWidget *treeWidget;
-    QHBoxLayout *treeLayout;
-
 
     bool firstInsert;
     QPushButton *deleteKeyButton;
@@ -52,6 +49,7 @@ private:
     QPushButton *sortButton;
 
     ctree<int> tree;
+    QWidget *treeWidget;
 };
 
 #endif // MAINWINDOW_H
