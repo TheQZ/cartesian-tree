@@ -14,6 +14,8 @@
 #include <QString>
 #include <QLabel>
 #include <iostream>
+#include <stdlib.h>
+#include <time.h>
 #include "ctree.h"
 
 namespace Ui {
@@ -50,6 +52,8 @@ private:
 
     ctree<int> tree;
     QWidget *treeWidget;
+    QLabel *sortedValues;
+
 };
 
 #endif // MAINWINDOW_H

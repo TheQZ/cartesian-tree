@@ -14,7 +14,12 @@ MainWindow::MainWindow(QWidget *parent) :
     insertButton = new QPushButton("Insert Value");
 
     deleteKeyButton = new QPushButton("Delete Key");
+    deleteKeyButton->setVisible(false);
     sortButton = new QPushButton("Sort Values");
+    sortButton->setVisible(false);
+    sortedValues = new QLabel();
+    sortedValues->setVisible(false);
+    sortedValues->setAlignment(Qt::AlignCenter);
 
     valuesSpinBox = new QSpinBox(this);
     valuesSpinBox->setMaximum(999);
@@ -32,9 +37,11 @@ MainWindow::MainWindow(QWidget *parent) :
     horizLayout->addWidget(valuesSpinBox);
     horizLayout->addWidget(insertButton);
     horizLayout->setAlignment(Qt::AlignCenter);
+    horizLayout->addWidget(deleteKeyButton);
 
     mainLayout->addWidget(titleLabel);
     mainLayout->addLayout(horizLayout);
+    mainLayout->addWidget(sortButton);
 
     mainWidget->setLayout(mainLayout);
     setCentralWidget(mainWidget);
@@ -44,6 +51,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(sortButton, SIGNAL(clicked()), this, SLOT(sortem()));
 
     treeWidget = new QWidget();
+
+
 }
 
 void MainWindow::insert()
@@ -51,14 +60,21 @@ void MainWindow::insert()
     int i = valuesSpinBox->value();
     tree.insert(i);
 
-    if (tree.size() == 1) horizLayout->addWidget(deleteKeyButton);
-    if (tree.size() == 2) mainLayout->addWidget(sortButton);
-
     refresh();
+
+    srand (time(NULL));
+
+    valuesSpinBox->setValue(rand() % 30);
 }
 
 void MainWindow::refresh()
 {
+    sortedValues->setVisible(false);
+    if (tree.size() >= 1) deleteKeyButton->setVisible(true);
+    else deleteKeyButton->setVisible(false);
+    if (tree.size() >= 2) sortButton->setVisible(true);
+    else sortButton->setVisible(false);
+
     delete treeWidget;
     treeWidget = nullptr;
     treeWidget = new QWidget();
@@ -98,6 +114,7 @@ void MainWindow::refresh()
     }
     treeWidget->setLayout(treeLayout);
     mainLayout->addWidget(treeWidget);
+    mainLayout->addWidget(sortButton);
 }
 
 void MainWindow::removeKey()
@@ -108,7 +125,21 @@ void MainWindow::removeKey()
 
 void MainWindow::sortem()
 {
-    tree.sortedVector();
+    sortedValues->clear();
+
+    std::vector<node<int> *> vector = tree.sortedVector();
+    std::string s;
+    s += "{";
+    for(node<int> *x : vector) {
+            s += " " +std::to_string(x->data) +" ";
+    }
+    s += "}";
+    sortedValues->setText(QString::fromStdString(s));
+    refresh();
+    mainLayout->addWidget(sortedValues);
+    sortedValues->setVisible(true);
+
+    // fill in sorted values vector with info
 }
 
 MainWindow::~MainWindow()
