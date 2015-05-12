@@ -34,10 +34,8 @@ void ctree<T>::insert(T data)
 {
   if(root == nullptr){
     root = new node<T>(data);
-    std::cout << "Inserted: " << data;
   }else{
     insert(root, data);
-    std::cout << ", " << data;
   }
 }
 
@@ -113,7 +111,7 @@ void ctree<T>::inOrder(node<T> *nd)
   if(nd == nullptr) return;
 
   inOrder(nd->left);
-  
+
   std::ostringstream ss;
   ss << nd->data;
   outStr += ss.str();
@@ -248,30 +246,26 @@ template <class T>
 void ctree<T>::deleteKey() {
   if (root == nullptr) return;
 
-    // create a queue of pointers to nodes 
-    std::queue<node<T> *> *q = new std::queue<node<T> *>{};
+  // create a queue of pointers to nodes 
+  std::queue<node<T> *> *q = new std::queue<node<T> *>{};
 
   // add all nodes except root to a queue in order
-  addToQueue(q);
-  root->left = nullptr;
-  root->right = nullptr;
+  // add nodes left of root to queue in sorted order
+  addToQueue(root->left, q);
+  // add nodes right of root to queue in sorted order
+  addToQueue(root->right, q);
 
   // delete key
+  root->left = nullptr;
+  root->right = nullptr;
   delete root;
-
+  root = nullptr;
+  
   // reinsert nodes according to order.
   while(!q->empty()) {
     reinsert(q->front());
     q->pop();
   }
-}
-
-template <class T>
-void ctree<T>::addToQueue(std::queue<node<T>*> *q) {
-  // add nodes left of root to queue in sorted order
-  addToQueue(root->left, q);
-  // add nodes right of root to queue in sorted order
-  addToQueue(root->right, q);
 }
 
 template <class T>
@@ -282,9 +276,11 @@ void ctree<T>::addToQueue(node<T> *n, std::queue<node<T>*> *q) {
   n->left = nullptr;
 
   node<T> *t = n->right;
-  t->parent = nullptr;
-  n->right = nullptr;
+  if(t != nullptr){
+    t->parent = nullptr;
+  }
 
+  n->right = nullptr;
   n->parent = nullptr;
   q->push(n);
     
@@ -293,14 +289,14 @@ void ctree<T>::addToQueue(node<T> *n, std::queue<node<T>*> *q) {
 
 template <class T>
 void ctree<T>::reinsert(node<T> *n) {
-    if(root == nullptr) root = n;
-    else {
-        node<T> *t = root;
-        while(t->right != nullptr) t = t->right;
-        n->parent = t;
-        t->right = n;
-        moveAround(n);
-    }
+  if(root == nullptr) root = n;
+  else {
+    node<T> *t = root;
+    while(t->right != nullptr) t = t->right;
+    n->parent = t;
+    t->right = n;
+    moveAround(n);
+  }
 }
 
 // - - - - - - - - - - - - //
@@ -309,28 +305,28 @@ void ctree<T>::reinsert(node<T> *n) {
 template <class T>
 
 std::vector<node<T> *> ctree<T>::sortedVector() {
-    std::vector<node<T> *> candidates = new std::vector<node<T> *>{};
-    std::vector<node<T> *> sorted = new std::vector<node<T> *>{};
+  std::vector<node<T> *> *candidates = new std::vector<node<T> *>{};
+  std::vector<node<T> *> *sorted = new std::vector<node<T> *>{};
 
-    candidates.push_back(root);
-    while(!candidates.empty()) {
-        unsigned int i = smallestCandidate(candidates);
-        node<T> *s = candidates[i];
-        sorted.push_back(s);
-        candidates.erase(candidates.begin() + i);
+  candidates->push_back(root);
+  while(!candidates->empty()) {
+    unsigned int i = smallestCandidate(candidates);
+    node<T> *s = candidates->at(i);
+    sorted->push_back(s);
+    candidates->erase(candidates->begin() + i);
 
-        if(s->left != nullptr) candidates.push_back(s->left);
-        if(s->right != nullptr) candidates.push_back(s->right);
-    }
+    if(s->left != nullptr) candidates->push_back(s->left);
+    if(s->right != nullptr) candidates->push_back(s->right);
+  }
 
-  return sorted;
+  return *sorted;
 }
 
 template <class T>
-unsigned int ctree<T>::smallestCandidate(std::vector<node<T> *> &c) {
-    unsigned int smallest = 0;
-    for (int i = 0; i < c.size(); i++) {
-        if(c[i]->data < c[smallest]->data) smallest = i;
-    }
-    return smallest;
+unsigned int ctree<T>::smallestCandidate(std::vector<node<T> *> *c) {
+  unsigned int smallest = 0;
+  for (int i = 0; i < c->size(); i++) {
+    if(c->at(i)->data < c->at(smallest)->data) smallest = i;
+  }
+  return smallest;
 }
