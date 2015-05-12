@@ -11,6 +11,7 @@ node(T data):right(nullptr),left(nullptr),parent(nullptr),data(data){}
   node *left;
   node *parent;
   T data;
+
 };
 
 #endif

@@ -22,6 +22,8 @@ class ctree
   bool isHeap();
   void deleteKey();
   std::vector<node<T> *> sortedVector();
+  std::vector<T> getInorderVector() {return inOrderVec;}
+  std::vector<int> getHeights() {return heights;}
 
  private:
   node<T> *root;
